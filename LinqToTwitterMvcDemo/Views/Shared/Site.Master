@@ -1,0 +1,143 @@
+﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
+    
+    <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+    
+    </head>
+
+<script type="text/javascript">
+
+    function init() {
+      //  alert("loaded");
+
+    }
+
+    function get_cookie(name) {
+        var results = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        if (results)
+            return (unescape(results[2]));
+        else
+            return null;
+    }
+
+    function getTowns() {
+        var town;
+        $.ajax({
+            type: "GET",
+            url: "http://api.geonames.org/search?q=north%20berwick&maxRows=10&username=fletch1&type=json&orderby=relevance",
+            //url: "http://api.geonames.org/findNearbyPlaceNameJSON?lat=" + lat + "&lng=" + lng + "&username=fletch1",
+            dataType: "jsonp",
+            success: function (json) {
+                $.each(json.geonames, function (i, geo) {
+                    //alert(geo.lat);
+                    var html = "<div onclick=/Home/SaveLatLong?lat=" + geo.lat + "&lng=" + geo.lng + ">" + geo.toponymName + ", " + geo.adminName1 + ", " + geo.countryName + "</div>";
+                    // town = geo.toponymName;
+                    html = "<div onclick=\"SaveLoc(" + geo.lat + "," + geo.lng + ")\">" + geo.toponymName + ", " + geo.adminName1 + ", " + geo.countryName + "</div>";
+                    // adminName1
+                    // countryName
+                    $("#towns").append(html);
+                });
+
+
+                //SaveNewLocation(lat, lng, town);
+
+            },
+            error: function (xhr, error) {
+
+                // $("#gps_results").html("No town listed for: " + lat + "," + lng);
+            },
+            complete: function (xhr, status) {
+
+            }
+
+        });
+    }
+
+    function SaveLoc(lat, lng) {
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:5010/Home/SaveLatLong",
+            data: "lat=" + lat + "&lng=" + lng,
+            dataType: "text/plain",
+            success: function (json) {
+
+            },
+            error: function (xhr, error) {
+                // console.debug(xhr); console.debug(error);
+            },
+            complete: function (xhr, status) {
+                GetWeather(lat, lng, 0, 1);
+            }
+
+        });    
+
+    }
+
+    function GetWeather(lat,lng,min,max) {
+        var NewDate = new Date();
+        var loc = lat + "," + lng;
+        min = min*2;
+        max = min + 1;
+
+        $.ajax({
+            type: "GET",
+            url: "http://api.wunderground.com/api/bf45926a1b878028/forecast/geolookup/q/" + loc + ".json",
+            //dataType: "jsonp",
+            //success: function(json) {
+
+            //$('#weather').
+            //url: "json.txt",
+            dataType: "jsonp",
+            success: function (json) {
+                //var json = eval('(' + jsontxt + ')');
+                var jsontext = JSON.stringify(json);
+                var location = json['location']['city'];
+                $('#weather').html("");
+                $('#footer').html("Location: " + location + "(" + lat + ", " + lng + ")</br>" + "Updated: " + NewDate);
+                //$('#weather').append("Weather for " + location);
+                var day = json['forecast']['txt_forecast']['forecastday'][min]['title'];
+                var day2 = json['forecast']['txt_forecast']['forecastday'][max]['title'];
+                var forecast = json['forecast']['txt_forecast']['forecastday'][min]['fcttext_metric'];
+                var forecast2 = json['forecast']['txt_forecast']['forecastday'][max]['fcttext_metric'];
+                var icon = json['forecast']['txt_forecast']['forecastday'][min]['icon'];
+                var icon2 = json['forecast']['txt_forecast']['forecastday'][max]['icon'];
+                var img1 = "<img src=\"http://icons.wxug.com/i/c/i/" + icon + ".gif\">";
+                var img2 = "<img src=\"http://icons.wxug.com/i/c/i/" + icon2 + ".gif\">";
+                var htmltable = "<table><tr><td>" + day + ":  </td><td>" + forecast + "</td></tr><tr><td>" + day2 + ":  </td><td>" + forecast2 + "</td></tr></table>";
+                //$('#weather').append(day + "</br>" + forecast + "</br>" + day2 + "</br>" + forecast2 + "<img src=\"http://icons.wxug.com/i/c/i/" + icon2 + ".gif\" />");
+                $('#weather').append(htmltable);
+
+                var epoch = Math.round(new Date().getTime() / 1000)
+
+            },
+            error: function (xhr, error) {
+                console.debug(xhr); console.debug(error);
+            },
+            complete: function () {
+
+            }
+
+        });
+
+    }
+
+</script>
+
+<body onload="testa(1,0);">
+    <div class="page">
+        <div id="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+          
+            <div id="footer">
+            <div class="term1">
+           </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
