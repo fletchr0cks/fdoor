@@ -77,7 +77,7 @@ namespace LinqToTwitterMvcDemo.Controllers
        
         private static string _GoogleClientId = "651937086252-na99drkmmna0k5purb5h27mnfifvc2tr.apps.googleusercontent.com";
         private static string _GoogleSecret = "l16kKa9wSc6E0oJzeyzRS5Ne";
-        private static string _ReturnUrl = "http://localhost:5010/Home/CallBack";
+      //  private static string _ReturnUrl = "http://localhost:5010/Home/CallBack";
         private static string _ReturnUrl = "http://FridgeDoor.apphb.com/Home/CallBack";
 
         public ActionResult Choose()
