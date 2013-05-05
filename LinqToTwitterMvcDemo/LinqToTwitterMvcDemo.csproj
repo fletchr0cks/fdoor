@@ -38,26 +38,33 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetOpenAuth">
-      <HintPath>..\..\..\calendar\calendar\Lib\DotNetOpenAuth.dll</HintPath>
+    <Reference Include="DotNetOpenAuth, Version=4.0.0.11165, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\calendar\Lib\DotNetOpenAuth.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis">
-      <HintPath>..\..\..\calendar\calendar\Lib\Google.Apis.dll</HintPath>
+    <Reference Include="Google.Apis, Version=1.3.0.15233, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\calendar\Lib\Google.Apis.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Authentication.OAuth2">
-      <HintPath>..\..\..\calendar\calendar\Lib\Google.Apis.Authentication.OAuth2.dll</HintPath>
+    <Reference Include="Google.Apis.Authentication.OAuth2, Version=1.3.0.15231, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\calendar\Lib\Google.Apis.Authentication.OAuth2.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Calendar.v3">
-      <HintPath>..\..\..\calendar\calendar\google-calendar-v3-rev39-csharp-1.3.0-beta-bin\Google.Apis.Calendar.v3.dll</HintPath>
+    <Reference Include="Google.Apis.Calendar.v3, Version=1.3.0.15233, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\calendar\google-calendar-v3-rev39-csharp-1.3.0-beta-bin\Google.Apis.Calendar.v3.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Samples.Helper">
-      <HintPath>..\..\..\Lib\Google.Apis.Samples.Helper.dll</HintPath>
+    <Reference Include="Google.Apis.Samples.Helper, Version=1.0.0.30566, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Google.Apis.Samples.Helper.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Tasks.v1">
-      <HintPath>..\..\..\Lib\Google.Apis.Tasks.v1.dll</HintPath>
+    <Reference Include="Google.Apis.Tasks.v1, Version=1.3.0.15233, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Google.Apis.Tasks.v1.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Tools.CodeGen">
-      <HintPath>..\..\..\Lib\Google.Apis.Tools.CodeGen.dll</HintPath>
+    <Reference Include="Google.Apis.Tools.CodeGen, Version=1.3.0.15234, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Google.Apis.Tools.CodeGen.dll</HintPath>
     </Reference>
     <Reference Include="LinqToTwitter, Version=2.1.0.1, Culture=neutral, PublicKeyToken=957107be965c25d9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -66,7 +73,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json.Net35, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Documents\GitHub\google-calendar-sample\GoogleCalendarSample\Libs\Newtonsoft.Json.Net35.dll</HintPath>
+      <HintPath>..\Lib\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
     <Reference Include="ServiceGenerator">
       <HintPath>..\..\..\Lib\ServiceGenerator.exe</HintPath>
