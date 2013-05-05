@@ -59,3 +59,4 @@ C:\Users\Nick\Documents\GitHub\fdoor\LinqToTwitterMvcDemo\bin\Google.Apis.Sample
 C:\Users\Nick\Documents\GitHub\fdoor\LinqToTwitterMvcDemo\bin\Google.Apis.Tasks.v1.dll
 C:\Users\Nick\Documents\GitHub\fdoor\LinqToTwitterMvcDemo\bin\Google.Apis.Tools.CodeGen.dll
 C:\Users\Nick\Documents\GitHub\fdoor\LinqToTwitterMvcDemo\bin\Newtonsoft.Json.Net35.dll
+C:\Users\Nick\Documents\GitHub\fdoor\LinqToTwitterMvcDemo\bin\ServiceGenerator.exe

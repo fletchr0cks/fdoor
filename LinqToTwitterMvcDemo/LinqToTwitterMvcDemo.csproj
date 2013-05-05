@@ -75,8 +75,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceGenerator">
-      <HintPath>..\..\..\Lib\ServiceGenerator.exe</HintPath>
+    <Reference Include="ServiceGenerator, Version=1.3.0.15218, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <ExecutableExtension>.exe</ExecutableExtension>
+      <HintPath>..\Lib\ServiceGenerator.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
