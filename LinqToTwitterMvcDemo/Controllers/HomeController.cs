@@ -77,7 +77,7 @@ namespace LinqToTwitterMvcDemo.Controllers
        
         private static string _GoogleClientId = "651937086252-na99drkmmna0k5purb5h27mnfifvc2tr.apps.googleusercontent.com";
         private static string _GoogleSecret = "l16kKa9wSc6E0oJzeyzRS5Ne";
-      //  private static string _ReturnUrl = "http://localhost:5010/Home/CallBack";
+        private static string _ReturnUrl_local = "http://localhost:5010/Home/CallBack";
         private static string _ReturnUrl = "http://FridgeDoor.apphb.com/Home/CallBack";
 
         public ActionResult Choose()
@@ -94,12 +94,7 @@ namespace LinqToTwitterMvcDemo.Controllers
 
         public ActionResult Index()
         {
-            //check for session cookie, use refresh token if expired.
-                
-
-                
-                //ViewData["token"] = token;
-               
+                  
                 var token = Session["GoogleAPIToken"];
 
                 if (Convert.ToString(token).Length < 2)
@@ -136,7 +131,21 @@ namespace LinqToTwitterMvcDemo.Controllers
             var refresh_token = Request.Cookies["RefreshToken"].Value;
             string Url = "https://accounts.google.com/o/oauth2/token";
             string grant_type = "refresh_token";
-            string redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl);
+
+            var request_url = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Contains("~"));
+            string urlBase = Request.Url.ToString();
+            Uri myUri = new Uri(Request.Url.ToString());
+            string redirect_uri_encode;
+            if (request_url.Contains("localhost"))
+            {
+                redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl_local);
+            }
+
+            else
+            {
+                redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl);
+            }
+            
             string data = "client_id={0}&client_secret={1}&refresh_token={2}&grant_type={3}";
             var urlstr = string.Format(Url, data, _GoogleClientId, _GoogleSecret, refresh_token, grant_type);
             return string.Format(Url, data, _GoogleClientId, _GoogleSecret, refresh_token, grant_type);
@@ -148,7 +157,19 @@ namespace LinqToTwitterMvcDemo.Controllers
             //NOTE: Key piece here, from Andrew's reply -> access_type=offline forces a refresh token to be issued
             string Url = "https://accounts.google.com/o/oauth2/auth?scope={0}&redirect_uri={1}&response_type={2}&client_id={3}&state={4}&access_type=offline&approval_prompt=force";
             string scope = UrlEncodeForGoogle("https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.readonly").Replace("%20", "+");
-            string redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl);
+            var request = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Contains("~"));
+            string urlBase = Request.Url.ToString();
+            Uri myUri = new Uri(Request.Url.ToString());
+            string redirect_uri_encode;
+            if (request.Contains("localhost"))
+            {
+                redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl_local);
+            }
+
+            else
+            {
+                redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl);
+            }
             string response_type = "code";
             string state = "";
 
@@ -200,7 +221,19 @@ namespace LinqToTwitterMvcDemo.Controllers
 
             string Url = "https://accounts.google.com/o/oauth2/token";
             string grant_type = "authorization_code";
-            string redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl);
+            var request_url = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Contains("~"));
+            string urlBase = Request.Url.ToString();
+            Uri myUri = new Uri(Request.Url.ToString());
+            string redirect_uri_encode;
+            if (request_url.Contains("localhost"))
+            {
+                redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl_local);
+            }
+
+            else
+            {
+                redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl);
+            }
             string data = "code={0}&client_id={1}&client_secret={2}&redirect_uri={3}&grant_type={4}";
 
             HttpWebRequest request = HttpWebRequest.Create(Url) as HttpWebRequest;
@@ -297,7 +330,8 @@ namespace LinqToTwitterMvcDemo.Controllers
             Response.AppendCookie(IDCookie);
             ViewData["caldata"] = textout + "kind: " + name + count + idlist + jsonIDs;
 
-            return View();
+            return RedirectToAction("Index_T");
+            //return View();
             //return JavaScript("Refresh Token: " + tokenData.Refresh_Token);
 
         }
@@ -316,7 +350,19 @@ namespace LinqToTwitterMvcDemo.Controllers
             var refresh_token = Request.Cookies["RefreshToken"].Value;
             string Url = "https://accounts.google.com/o/oauth2/token";
             string grant_type = "refresh_token";
-            string redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl);
+            var request_url = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Contains("~"));
+            string urlBase = Request.Url.ToString();
+            Uri myUri = new Uri(Request.Url.ToString());
+            string redirect_uri_encode;
+            if (request_url.Contains("localhost"))
+            {
+                redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl_local);
+            }
+
+            else
+            {
+                redirect_uri_encode = UrlEncodeForGoogle(_ReturnUrl);
+            }
             string data = "client_id={0}&client_secret={1}&refresh_token={2}&grant_type={3}";
 
             HttpWebRequest request = HttpWebRequest.Create(Url) as HttpWebRequest;
