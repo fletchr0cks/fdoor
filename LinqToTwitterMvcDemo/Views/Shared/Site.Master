@@ -7,6 +7,7 @@
     
     <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+     <script src="../../Scripts/date.js" type="text/javascript"></script>
     
     </head>
 
@@ -14,7 +15,7 @@
 
     function init() {
       //  alert("loaded");
-
+        
     }
 
     function get_cookie(name) {
@@ -83,21 +84,17 @@
         var loc = lat + "," + lng;
         min = min*2;
         max = min + 1;
-
+        $('#weather').html("trying weather");
         $.ajax({
             type: "GET",
             url: "http://api.wunderground.com/api/bf45926a1b878028/forecast/geolookup/q/" + loc + ".json",
-            //dataType: "jsonp",
-            //success: function(json) {
 
-            //$('#weather').
-            //url: "json.txt",
             dataType: "jsonp",
             success: function (json) {
                 //var json = eval('(' + jsontxt + ')');
-                var jsontext = JSON.stringify(json);
+                //var jsontext = JSON.stringify(json);
                 var location = json['location']['city'];
-                $('#weather').html("");
+                alert("weather success " + location);
                 $('#footer').html("Location: " + location + "(" + lat + ", " + lng + ")</br>" + "Updated: " + NewDate);
                 //$('#weather').append("Weather for " + location);
                 var day = json['forecast']['txt_forecast']['forecastday'][min]['title'];
@@ -117,6 +114,7 @@
             },
             error: function (xhr, error) {
                 console.debug(xhr); console.debug(error);
+                $('#footer').appnd(xhr + "  " + error);
             },
             complete: function () {
 
@@ -135,6 +133,8 @@
             getTowns();
             //alert("towns");
         } else {
+            
+            alert(lat);
             GetWeather(lat, lng, min, max);
         }
 
@@ -305,8 +305,30 @@
             }
 
         });
-
     }
+
+function SubmitTwID() {
+    var twitterID = document.getElementById("twid").value;
+    $.ajax({
+        type: "POST",
+        url: "/Home/SaveTwID",
+        data: "id=" + twitterID,
+        dataType: "text/plain",
+        success: function (json) {
+
+        },
+        error: function (xhr, error) {
+            // console.debug(xhr); console.debug(error);
+        },
+        complete: function (xhr, status) {
+            //
+        }
+
+    });    
+
+
+}
+
     function formatDT(start, end, num) {
         var NewDate = new Date();
         NewDate.setDate(NewDate.getDate() + num);
@@ -344,8 +366,11 @@
             eampm = "pm";
         }
 
+        var startfm = start.toString('H:mm tt');
+        var endfm = end.toString('H:mm tt');
 
-        var dt = starthr + ":" + startmm + sampm + " - " + endhr + ":" + endmm + eampm + moretxt;
+        var dt = startfm + " - " + endfm + moretxt;
+        //var dt = starthr + ":" + startmm + sampm + " - " + endhr + ":" + endmm + eampm + moretxt + date2;
         return dt;
     }
 

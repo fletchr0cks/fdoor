@@ -116,7 +116,7 @@ namespace LinqToTwitterMvcDemo.Controllers
                 }
                 else
                 {
-                    return View("Done");
+                    return View("Index_T");
                 }
           
         }
@@ -405,73 +405,85 @@ namespace LinqToTwitterMvcDemo.Controllers
             //save cookie
             RedirectToAction("Index_T");
         }
-     
-        public ActionResult Index_T()
-            //enter twitter username and message for restful api
-      
+
+        public ActionResult SaveTwID(string id)
         {
-      var tname = "FletcherFridge";
-      var msg = "hardcoded test " + DateTime.Now;
-      //Auth: oauthtoken=1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5 id=FletcherFridge 1317302059 oathaccesstoken= v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w
-      credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
-      credentials.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
-      credentials.AccessToken = "v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w";
-      credentials.OAuthToken = "1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5";
+            SetCookie("TwitterID", id);
 
-            if (credentials.ConsumerKey == null || credentials.ConsumerSecret == null)
-            {
-                credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
-                credentials.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
-            }
-
-            auth = new MvcAuthorizer
-            {
-                Credentials = credentials
-            };
-
-            auth.CompleteAuthorization(Request.Url);
-
-            if (!auth.IsAuthorized)
-            {
-                Uri specialUri = new Uri(Request.Url.ToString());
-                return auth.BeginAuthorization(specialUri);
-            }
-
-            twitterCtx = new TwitterContext(auth);
-
-            var friendTweets =
-                (from tweet in twitterCtx.Status
-                 where tweet.Type == StatusType.User &&
-                       tweet.ScreenName == "FletchTweet"                       
-                 select new TweetViewModel
-                 {
-                     ImageUrl = tweet.User.ProfileImageUrl,
-                     ScreenName = tweet.User.Identifier.ScreenName,
-                     TimeStamp = Convert.ToString(tweet.CreatedAt.Date),
-                     Tweet = tweet.Text,
-                     ID = tweet.ID
-                 })
-                .ToList();
-            string status = "hihi " + DateTime.Now;
-           // var tweetnew = twitterCtx.UpdateStatus(status);
-            //var dtweet = twitterCtx.NewDirectMessage(tname,msg);
-            var oauthToken = auth.Credentials.OAuthToken;
-            var oauthAccessT = auth.Credentials.AccessToken;
-            var userd = auth.Credentials.ScreenName + " " + auth.Credentials.UserId;
-        //http://localhost:5010/?oauth_token=9IWia8yWenYytqosbErCRno7KcJPr55fMXHvqJkoY&oauth_verifier=g6pbTya6OOcsH2O0f3PuzQKUtCQBz1lQBz0BmnixHU
-            ViewData["authdeets"] = oauthAccessT;
-            //Auth: oauthtoken=1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5 id=FletcherFridge 1317302059 oathaccesstoken= v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w
-            //+ save id first time.
-            return View("Index", friendTweets);
+            return Redirect("/Home/Index_T");
         }
 
-      //  public JsonResult jtest()
-      //  {
-       //     var jsonout " { "kind": "calendar#events", "etag": "\"GZxpEFttRDAOmLHnWRxLHHWPGwk/FusWf8dSk4OSBngXmSwKRmVnhr4\"", "summary": "Miriam Fletcher", "updated": "2013-04-15T12:39:20.000Z", "timeZone": "Europe/London", "accessRole": "owner", "nextPageToken": "EiUKGmFpamtobDI0bTcyYmh1ZDdhMmQwdmowb3E4GIDQsamxx7YC", "items": [ { "kind": "calendar#event", "etag": "\"GZxpEFttRDAOmLHnWRxLHHWPGwk/Z2NhbDAwMDAxMzY0OTM5NDE2OTk3MDAw\"", "id": "_b194ija38562qdhk6oqjad9g6go2qc9j6gqj0e9o6koj6b9h6oq3edpk68rg", "status": "confirmed", "htmlLink": "https://www.google.com/calendar/event?eid=X2IxOTRpamEzODU2MnFkaGs2b3FqYWQ5ZzZnbzJxYzlqNmdxajBlOW82a29qNmI5aDZvcTNlZHBrNjhyZyBtaXJpYW0ub3JjaGlkQGdvb2dsZW1haWwuY29t", "created": "2013-03-30T08:20:35.000Z", "updated": "2013-04-02T21:50:16.997Z", "summary": "Meet up with kerry lodge", "creator": { "email": "miriam.orchid@googlemail.com", "displayName": "Miriam Fletcher", "self": true }, "organizer": { "email": "miriam.orchid@googlemail.com", "displayName": "Miriam Fletcher", "self": true }, "start": { "dateTime": "2013-04-03T15:00:00+01:00" }, "end": { "dateTime": "2013-04-03T17:00:00+01:00" }, "visibility": "public", "iCalUID": "XRIMCAL-646555040-1345098513-16477427", "sequence": 1, "extendedProperties": { "shared": { "X-MICROSOFT-CDO-BUSYSTATUS": "BUSY" } }, "reminders": { "useDefault": true } }, { "kind": "calendar#event", "etag": "\"GZxpEFttRDAOmLHnWRxLHHWPGwk/Z2NhbDAwMDAxMzY1MTcwMjYzNzgwMDAw\"", "id": "_b194ija38562qdhk6oqjad9g6go2qc9j6gqj0e9o6sojcb9h60rj8e1g6ssg", "status": "confirmed", "htmlLink": "https://www.google.com/calendar/event?eid=X2IxOTRpamEzODU2MnFkaGs2b3FqYWQ5ZzZnbzJxYzlqNmdxajBlOW82c29qY2I5aDYwcmo4ZTFnNnNzZyBtaXJpYW0ub3JjaGlkQGdvb2dsZW1haWwuY29t", "created": "2013-04-05T13:57:43.000Z", "updated": "2013-04-05T13:57:43.780Z", "summary": "Hair highlighted", "creator": { "email": "miriam.orchid@googlemail.com", "displayName": "Miriam Fletcher", "self": true }, "organizer": { "email": "miriam.orchid@googlemail.com", "displayName": "Miriam Fletcher", "self": true }, "start": { "dateTime": "2013-04-08T10:30:00+01:00" }, "end": { "dateTime": "2013-04-08T11:30:00+01:00" }, "visibility": "public", "iCalUID": "XRIMCAL-646555040-1345098716-10748079", "sequence": 0, "extendedProperties": { "shared": { "X-MICROSOFT-CDO-BUSYSTATUS": "BUSY" } }, "reminders": { "useDefault": true } }, { "kind": "calendar#event", "etag": "\"GZxpEFttRDAOmLHnWRxLHHWPGwk/Z2NhbDAwMDAxMzY1MTcwMjczNjAxMDAw\"", "id": "_b194ija38562qdhk6oqjad9g6go2qe1i6srjcdpm6osiqc9j6cojgd9m68", "status": "cancelled" }, { "kind": "calendar#event", "etag": "\"GZxpEFttRDAOmLHnWRxLHHWPGwk/Z2NhbDAwMDAxMzY1NTgwMTQ5NTE5MDAw\"", "id": "_b194ija38562qdhk6oqjad9g6go2qc9j6gqj0e9o70o3gb9i70pj8cpk6c", "status": "confirmed", "htmlLink": "https://www.google.com/calendar/event?eid=X2IxOTRpamEzODU2MnFkaGs2b3FqYWQ5ZzZnbzJxYzlqNmdxajBlOW83MG8zZ2I5aTcwcGo4Y3BrNmMgbWlyaWFtLm9yY2hpZEBnb29nbGVtYWlsLmNvbQ", "created": "2013-04-10T07:49:09.000Z", "updated": "2013-04-10T07:49:09.519Z", "summary": "Meet louis buttercup", "creator": { "email": "miriam.orchid@googlemail.com", "displayName": "Miriam Fletcher", "self": true }, "organizer": { "email": "miriam.orchid@googlemail.com", "displayName": "Miriam Fletcher", "self": true }, "start": { "dateTime": "2013-04-11T10:30:00+01:00" }, "end": { "dateTime": "2013-04-11T11:30:00+01:00" }, "visibility": "public", "iCalUID": "XRIMCAL-646555040-1345098808-2834343", "sequence": 0, "extendedProperties": { "shared": { "X-MICROSOFT-CDO-BUSYSTATUS": "BUSY" } }, "reminders": { "useDefault": true } }, { "kind": "calendar#event", "etag": "\"GZxpEFttRDAOmLHnWRxLHHWPGwk/Z2NhbDAwMDAxMzY1Nzc1NTI3ODg4MDAw\"", "id": "aijkhl24m72bhud7a2d0vj0oq8", "status": "cancelled" } ] }";
+        public ActionResult Index_T()
+        //enter twitter username and message for restful api
+        {
+            try
+            {
+                string tname = Request.Cookies["TwitterID"].Value;
+                var msg = "hardcoded test " + DateTime.Now;
+                //Auth: oauthtoken=1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5 id=FletcherFridge 1317302059 oathaccesstoken= v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w
+                credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
+                credentials.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
+                credentials.AccessToken = "v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w";
+                credentials.OAuthToken = "1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5";
 
+                if (credentials.ConsumerKey == null || credentials.ConsumerSecret == null)
+                {
+                    credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
+                    credentials.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
+                }
 
-         //   return Json(    
-      //  }
+                auth = new MvcAuthorizer
+                {
+                    Credentials = credentials
+                };
+
+                auth.CompleteAuthorization(Request.Url);
+
+                if (!auth.IsAuthorized)
+                {
+                    Uri specialUri = new Uri(Request.Url.ToString());
+                    return auth.BeginAuthorization(specialUri);
+                }
+
+                twitterCtx = new TwitterContext(auth);
+
+                var friendTweets =
+                    (from tweet in twitterCtx.Status
+                     where tweet.Type == StatusType.User &&
+                           tweet.ScreenName == tname
+                     select new TweetViewModel
+                     {
+                         ImageUrl = tweet.User.ProfileImageUrl,
+                         ScreenName = tweet.User.Identifier.ScreenName,
+                         TimeStamp = Convert.ToString(tweet.CreatedAt.Date),
+                         Tweet = tweet.Text,
+                         ID = tweet.ID
+                     })
+                    .ToList();
+                string status = "hihi " + DateTime.Now;
+                // var tweetnew = twitterCtx.UpdateStatus(status);
+                //var dtweet = twitterCtx.NewDirectMessage(tname,msg);
+                var oauthToken = auth.Credentials.OAuthToken;
+                var oauthAccessT = auth.Credentials.AccessToken;
+                var userd = auth.Credentials.ScreenName + " " + auth.Credentials.UserId;
+                //http://localhost:5010/?oauth_token=9IWia8yWenYytqosbErCRno7KcJPr55fMXHvqJkoY&oauth_verifier=g6pbTya6OOcsH2O0f3PuzQKUtCQBz1lQBz0BmnixHU
+                ViewData["authdeets"] = oauthAccessT;
+                //Auth: oauthtoken=1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5 id=FletcherFridge 1317302059 oathaccesstoken= v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w
+                //+ save id first time.
+                return View("Index", friendTweets);
+
+            }
+            catch
+            {
+                return RedirectToAction("SetTwitterID");
+            }
+        }
+
+        public ActionResult SetTwitterID()
+        {
+
+            return View();
+        }
 
         public ActionResult Done()
         {

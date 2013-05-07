@@ -131,12 +131,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Scripts\date.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jsstuff.js" />
     <Content Include="Views\Home\CallBack.aspx" />
     <Content Include="Views\Home\Choose.aspx" />
     <Content Include="Views\Home\ChooseT.aspx" />
     <Content Include="Views\Home\Done.aspx" />
+    <Content Include="Views\Home\SetTwitterID.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
