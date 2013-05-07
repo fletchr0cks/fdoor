@@ -84,7 +84,7 @@
         var loc = lat + "," + lng;
         min = min*2;
         max = min + 1;
-        $('#weather').html("trying weather");
+       // $('#weather').html("trying weather");
         $.ajax({
             type: "GET",
             url: "http://api.wunderground.com/api/bf45926a1b878028/forecast/geolookup/q/" + loc + ".json",
@@ -94,7 +94,7 @@
                 //var json = eval('(' + jsontxt + ')');
                 //var jsontext = JSON.stringify(json);
                 var location = json['location']['city'];
-                alert("weather success " + location);
+               // alert("weather success " + location);
                 $('#footer').html("Location: " + location + "(" + lat + ", " + lng + ")</br>" + "Updated: " + NewDate);
                 //$('#weather').append("Weather for " + location);
                 var day = json['forecast']['txt_forecast']['forecastday'][min]['title'];
@@ -133,8 +133,6 @@
             getTowns();
             //alert("towns");
         } else {
-            
-            alert(lat);
             GetWeather(lat, lng, min, max);
         }
 
@@ -267,7 +265,7 @@
                 //type = refresh
                 var typej = jsonresp['type'];
                 if (typej == "refresh") {
-                    alert("refreshing");
+                    //alert("refreshing");
                     window.location.href = '/Home/GoogleRefresh';
                 } else {
                     var summary = jsonresp['summary'];
@@ -368,8 +366,8 @@ function SubmitTwID() {
 
         var startfm = start.toString('H:mm tt');
         var endfm = end.toString('H:mm tt');
-
-        var dt = startfm + " - " + endfm + moretxt;
+        var dt = start + " -> " + end;
+        //var dt = startfm + " - " + endfm + moretxt;
         //var dt = starthr + ":" + startmm + sampm + " - " + endhr + ":" + endmm + eampm + moretxt + date2;
         return dt;
     }
