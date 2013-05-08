@@ -363,13 +363,25 @@ function SubmitTwID() {
             endhr = parseInt(endhr) - 12;
             eampm = "pm";
         }
-
-        var startfm = start.toString('H:mm tt');
+        var startdt = Date.parse(start);
+        var enddt = new Date(Date.parse(start));
+        var startfm = start.toString();
+        var st = startfm.split(" ");
+        startfm = st[1];
         var endfm = end.toString('H:mm tt');
-        var dt = start + " -> " + end;
-        //var dt = startfm + " - " + endfm + moretxt;
+        //var dt = startdt  + " -> " + enddt;
+        var dt = startfm + " - " + endfm + moretxt;
         //var dt = starthr + ":" + startmm + sampm + " - " + endhr + ":" + endmm + eampm + moretxt + date2;
         return dt;
+    }
+
+    function parseDate(date) {
+
+        var m = /^(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d) UTC$/.exec(date);
+        alert(m[2]);
+        var tzOffset = new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]).getTimezoneOffset();
+
+        return new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5] - tzOffset, +m[6]);
     }
 
 
