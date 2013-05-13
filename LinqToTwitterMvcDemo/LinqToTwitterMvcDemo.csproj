@@ -138,6 +138,7 @@
     <Content Include="Views\Home\Choose.aspx" />
     <Content Include="Views\Home\ChooseT.aspx" />
     <Content Include="Views\Home\Done.aspx" />
+    <Content Include="Views\Home\DoneTwitterAuth.aspx" />
     <Content Include="Views\Home\SetTwitterID.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

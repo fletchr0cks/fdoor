@@ -280,6 +280,7 @@
                         $.each(jsonresp.items, function (n, item) {
                             if (item.status != "cancelled") {
                                 var itemstart = new Date(item.start.dateTime);
+                                //var start2 = itemstart
                                 var itemend = new Date(item.end.dateTime);
                                 //var dts = formatDT(itemstart,"start",itemend);
                                 var dte = formatDT(itemstart, itemend, min);
@@ -365,9 +366,9 @@ function SubmitTwID() {
         }
         var startdt = Date.parse(start);
         var enddt = new Date(Date.parse(start));
-        var startfm = start.toString();
-        var st = startfm.split(" ");
-        startfm = st[1];
+        var startfm = start.getHours();
+        //var st = start.split(" ");
+        //startfm = st[1];
         var endfm = end.toString('H:mm tt');
         //var dt = startdt  + " -> " + enddt;
         var dt = startfm + " - " + endfm + moretxt;

@@ -416,16 +416,27 @@ namespace LinqToTwitterMvcDemo.Controllers
         public ActionResult Index_T()
         //enter twitter username and message for restful api
         {
-            try
+           
+          try
             {
                 string tname = Request.Cookies["TwitterID"].Value;
+                string accesstoken = Request.Cookies["oauth_accessToken"].Value;
+                string oauthtoken = Request.Cookies["oauth_oauthToken"].Value;
                 var msg = "hardcoded test " + DateTime.Now;
+                //http://localhost:5010/Home/SetTwitterID?oauth_token=JjJCdn2Tn3o9Cz3lHEFotAZQ5xZSz8VbTAjHhg1aTt0&oauth_verifier=TP7PWgnTi2CIu2YuQ7AIpRDknEYuSe0H1RcYXMSp5g
                 //Auth: oauthtoken=1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5 id=FletcherFridge 1317302059 oathaccesstoken= v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w
                 credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
                 credentials.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
-                credentials.AccessToken = "v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w";
-                credentials.OAuthToken = "1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5";
-
+                credentials.AccessToken = accesstoken;
+                    //"36777457-120pFjOwR6YjwAHZcYnlrlwsW7cMBrmP7IAvH1NIY";
+                    //oauthverifier;
+                //hWSN0pUWsBFlvS8fQbwpR31iqWLbhEnbUBCU3jZfI     from server
+                //36777457-120pFjOwR6YjwAHZcYnlrlwsW7cMBrmP7IAvH1NIY
+                credentials.OAuthToken = oauthtoken;
+                    //"71UrF3zuFNouejyu0RUhIqRVWsREuzzIpiwWYSc8A";
+                    //oauthtoken;
+                //71UrF3zuFNouejyu0RUhIqRVWsREuzzIpiwWYSc8A
+               
                 if (credentials.ConsumerKey == null || credentials.ConsumerSecret == null)
                 {
                     credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
@@ -444,7 +455,8 @@ namespace LinqToTwitterMvcDemo.Controllers
                     Uri specialUri = new Uri(Request.Url.ToString());
                     return auth.BeginAuthorization(specialUri);
                 }
-
+                //("oauth_accessToken", credentials.AccessToken);
+                //SetCookie("oauth_oauthToken", credentials.OAuthToken);
                 twitterCtx = new TwitterContext(auth);
 
                 var friendTweets =
@@ -481,7 +493,48 @@ namespace LinqToTwitterMvcDemo.Controllers
 
         public ActionResult SetTwitterID()
         {
+                credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
+                credentials.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
+                //credentials.AccessToken = "v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w";
+                //credentials.OAuthToken = "1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5";
 
+                auth = new MvcAuthorizer
+                {
+                    Credentials = credentials
+                };
+
+                auth.CompleteAuthorization(Request.Url);
+
+                if (!auth.IsAuthorized)
+                {
+                    Uri specialUri = new Uri(Request.Url.ToString());
+                    //Uri specialUri = new Uri("http://localhost:5010/Home/DoneTwitterAuth");
+                    return auth.BeginAuthorization(specialUri);
+                }
+
+               // var at = auth.Credentials.AccessToken;
+               // var oauthtoken = auth.Credentials.OAuthToken;
+
+                var accesstoken = credentials.AccessToken;
+                var oauthtoken = credentials.OAuthToken;
+                var twitterID = credentials.ScreenName;
+                
+                SetCookie("oauth_accessToken", accesstoken);
+                SetCookie("oauth_oauthToken", oauthtoken);
+                SetCookie("TwitterID", twitterID);
+
+                return RedirectToAction("Index_T");
+
+            
+        }
+
+        public ActionResult DoneTwitterAuth(string oauth_token, string oauth_verifier)
+        {
+            ViewData["deets"] = oauth_verifier + oauth_token;
+
+            SetCookie("oauth_tokenT", oauth_token);
+            SetCookie("oauth_verifierT", oauth_verifier);
+            //return RedirectToAction("Index_T");
             return View();
         }
 
