@@ -279,16 +279,24 @@
                         $('#sum' + i).append("<br /><div class=\"term1\">" + datestr + ":  " + name + "</div>");
                         $.each(jsonresp.items, function (n, item) {
                             if (item.status != "cancelled") {
-                                var itemstart = new Date(item.start.dateTime);
-                                //var start2 = itemstart
-                                var itemend = new Date(item.end.dateTime);
+                                var datetest = item.start.dateTime;
+                                var start_dt = new Date(item.start.dateTime);
+                                var end_dt = new Date(item.end.dateTime);
+                                var start_d = new Date(item.start.date);
+                                var end_d = new Date(item.end.date);
                                 //var dts = formatDT(itemstart,"start",itemend);
-                                var dte = formatDT(itemstart, itemend, min);
+                                var dte = "";
+                                if (start_dt != "Invalid Date" ) {
+                                    dte = start_dt.toString('H:mm tt') + " - " + end_dt;
+                                } else {
+                                    dte = "All day";
+                                }
+                                //formatDT(itemstart, itemend, min);
                                 var location = "";
                                 if (item.location != undefined) {
                                     location = ", " + item.location;
                                 }
-                                $('#sum' + i).append("<div class=\"term3\">" + dte + "</div>    <div class=\"term1evt\">" + item.summary + location + "</div>");
+                                $('#sum' + i).append("<div class=\"term3\">" + dte + start_dt + "</div>    <div class=\"term1evt\">" + item.summary + location + "</div>");
                             }
 
                         });
