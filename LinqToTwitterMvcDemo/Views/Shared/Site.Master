@@ -72,14 +72,15 @@
                 // console.debug(xhr); console.debug(error);
             },
             complete: function (xhr, status) {
-                GetWeather(lat, lng, 0, 1);
+               // GetWeather(lat, lng, 0, 1);
             }
 
         });    
 
     }
 
-    function GetWeather(lat,lng,min,max) {
+    function GetWeather(lat, lng, min, max) {
+        $('#weather').html("");
         var NewDate = new Date();
         var loc = lat + "," + lng;
         min = min*2;
@@ -133,7 +134,7 @@
             getTowns();
             //alert("towns");
         } else {
-            GetWeather(lat, lng, min, max);
+           // GetWeather(lat, lng, min, max);
         }
 
         $('#suminj').html("");
@@ -280,23 +281,24 @@
                         $.each(jsonresp.items, function (n, item) {
                             if (item.status != "cancelled") {
                                 var datetest = item.start.dateTime;
+                                var datetest2 = item.start.date;
                                 var start_dt = new Date(item.start.dateTime);
                                 var end_dt = new Date(item.end.dateTime);
                                 var start_d = new Date(item.start.date);
                                 var end_d = new Date(item.end.date);
                                 //var dts = formatDT(itemstart,"start",itemend);
                                 var dte = "";
-                                if (start_dt != "Invalid Date" ) {
-                                    dte = start_dt.toString('H:mm tt') + " - " + end_dt;
+                                if (start_dt != "Invalid Date") {
+                                    // dte = start_dt.toString('H:mm tt') + " - " + end_dt;
                                 } else {
-                                    dte = "All day";
+                                    // dte = "All day";
                                 }
                                 //formatDT(itemstart, itemend, min);
                                 var location = "";
                                 if (item.location != undefined) {
                                     location = ", " + item.location;
                                 }
-                                $('#sum' + i).append("<div class=\"term3\">" + dte + start_dt + "</div>    <div class=\"term1evt\">" + item.summary + location + "</div>");
+                                $('#sum' + i).append("<div class=\"term3\">" + dte + datetest + " == " + datetest2 + "</div>    <div class=\"term1evt\">" + item.summary + location + "</div>");
                             }
 
                         });
