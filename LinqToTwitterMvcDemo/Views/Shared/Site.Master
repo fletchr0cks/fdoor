@@ -286,6 +286,9 @@
                                 var end_dt = new Date(item.end.dateTime);
                                 var start_d = new Date(item.start.date);
                                 var end_d = new Date(item.end.date);
+                                var hr = start_dt.getUTCHours();
+                                var hr2 = start_dt.getHours();
+                                
                                 //var dts = formatDT(itemstart,"start",itemend);
                                 var dte = "";
                                 if (start_dt != "Invalid Date") {
@@ -298,7 +301,7 @@
                                 if (item.location != undefined) {
                                     location = ", " + item.location;
                                 }
-                                $('#sum' + i).append("<div class=\"term3\">" + dte + datetest + " == " + datetest2 + "</div>    <div class=\"term1evt\">" + item.summary + location + "</div>");
+                                $('#sum' + i).append("<div class=\"term3\">" + dte + datetest + " == " + datetest2 + " --" + hr + " :: " + hr2 + "</div>    <div class=\"term1evt\">" + item.summary + location + "</div>");
                             }
 
                         });
