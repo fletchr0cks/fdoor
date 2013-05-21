@@ -132,6 +132,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Scripts\date.js" />
+    <Content Include="Scripts\iso8601.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jsstuff.js" />
     <Content Include="Views\Home\CallBack.aspx" />
