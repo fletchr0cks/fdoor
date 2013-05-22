@@ -287,7 +287,8 @@
                                 var end_dt = new Date(item.end.dateTime);
                                 var start_d = new Date(item.start.date);
                                 var end_d = new Date(item.end.date);
-                                var isot = parseISO8601Date(item.start.dateTime);
+                                var stf = parseISO8601Date(item.start.dateTime);
+                                var endf = parseISO8601Date(item.end.dateTime);
                                 //var dts = formatDT(itemstart,"start",itemend);
                                 var dte = "";
                                 if (start_dt != "Invalid Date") {
@@ -302,7 +303,7 @@
                                 }
 
                            
-                                $('#sum' + i).append("<div class=\"term3\">" + isot + " == " + start_dt + "</div>    <div class=\"term1evt\">" + item.summary + location + "</div>");
+                                $('#sum' + i).append("<div class=\"term3\">" + stf + " - " + endf + "</div>    <div class=\"term1evt\">" + item.summary + location + "</div>");
                             }
 
                         });
@@ -318,6 +319,15 @@
             }
 
         });
+    }
+
+    function parseISO8601(s) {
+        var re = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:.(\d+))?(Z|[+-]\d{2})(?::(\d{2}))?/,
+            d = s.match(re);
+        if (!d) return null;
+        for (var i in d)
+            d[i] = ~ ~d[i];
+        return new Date(Date.UTC(d[1], d[2] - 1, d[3], d[4], d[5], d[6], d[7]) + (d[8] * 60 + d[9]) * 60000);
     }
 
     function parseISO8601Date(s) {
@@ -341,19 +351,27 @@
         if (!d) {
             throw "Couldn't parse ISO 8601 date string '" + s + "'";
         }
-
+        //alert(d);
         // parse strings, leading zeros into proper ints
         var a = [1, 2, 3, 4, 5, 6, 10, 11];
         for (var i in a) {
             d[a[i]] = parseInt(d[a[i]], 10);
+            //alert(d[a[i]]);
         }
         d[7] = parseFloat(d[7]);
-
+        var hr = parseInt(d[4], 10);
+        var min = parseInt(d[5], 10);
+        if (hr < 10) {
+            hr = "0" + hr;
+        }
+        if (min < 10) {
+            min = "0" + min;
+        }
         // Date.UTC(year, month[, date[, hrs[, min[, sec[, ms]]]]])
         // note that month is 0-11, not 1-12
         // see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date/UTC
         var ms = Date.UTC(d[1], d[2] - 1, d[3], d[4], d[5], d[6]);
-        alert(ms);
+        //alert(ms + d[2]);
         // if there are milliseconds, add them
         if (d[7] > 0) {
             ms += Math.round(d[7] * 1000);
@@ -366,14 +384,15 @@
                 offset += d[11] * 60 * 1000;
             }
             if (d[9] == "-") {
-               // ms -= offset;
+               ms -= offset;
             }
             else {
-               // ms += offset;
+               ms += offset;
             }
-        }
-
-        return new Date(ms);
+       }
+       var outp = hr + ":" + min;
+        return outp;
+        //return new Date(ms);
     };
 
 function SubmitTwID() {
