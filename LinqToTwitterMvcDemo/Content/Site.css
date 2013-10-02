@@ -12,14 +12,14 @@ body
     padding: 0;
     color: #696969;
 }
-.term1 {font-family: 'Helvetica', cursive;color: #727272; font-size:14px; vertical-align:top}
-.day {font-family: 'Helvetica', cursive;color: #727272; font-size:14px; vertical-align:top}
-.term1evt {font-family: 'Helvetica', cursive;color: #FFF; font-size:14px; padding-bottom: 8px}
-.term2 {font-family: 'Helvetica', cursive;color: #FFF; font-size:14px}
+.term1 {font-family: 'Helvetica', cursive;color: #ADADAD; font-size:18px; vertical-align:top}
+.day {font-family: 'Helvetica', cursive;color: #8F8F8F; font-size:16px; vertical-align:top}
+.term1evt {font-family: 'Helvetica', cursive;color: #FFF; font-size:16px; padding-bottom: 8px}
+.term2 {font-family: 'Helvetica', cursive;color: #FFF; font-size:16px}
 .term3 {font-family: 'Helvetica', cursive;color: #FFF; font-size:20px; padding-bottom: 2px; display:inline}
 .term3btn {font-family: 'Helvetica', cursive;color: #FFF; border-color: #FFF; font-size:18px; padding:2px; display:inline; vertical-align:middle}
-.title {font-family: 'Helvetica', cursive;color: #727272; font-size:20px; padding-bottom: 2px}
-.thin { border-bottom:2px solid #272727; vertical-align:middle; height:10px }
+.title {font-family: 'Helvetica', cursive;color: #8F8F8F; font-size:20px; padding-bottom: 2px}
+.thin { border-bottom:2px solid #8F8F8F; vertical-align:middle; height:10px }
 .fat { height: 10px }
 .spacer { height: 5px }
 .buttons { }

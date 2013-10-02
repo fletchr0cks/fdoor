@@ -1,4 +1,7 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace LinqToTwitterMvcDemo.Models
 {
@@ -28,5 +31,14 @@ namespace LinqToTwitterMvcDemo.Models
         public string TimeStamp { get; set; }
 
         public string ID { get; set; }
+
+        public int dayssince(DateTime tdate)
+        {
+            TimeSpan diff = DateTime.Now.Subtract(tdate);
+            int days = Convert.ToInt32(diff.TotalDays);
+
+            return days;
+
+        }
     }
 }

@@ -7,8 +7,6 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <script type="text/javascript">
 
-   
- 
 </script>
 <div class="top">
    
@@ -18,7 +16,17 @@
     {
     %>
      <tr>
-    <td style="width:50px" class="term1"><%: Convert.ToDateTime(tweet.TimeStamp).GetDateTimeFormats('d').First() %>:  </td>
+    <td style="width:50px" class="term1">
+    <% if (tweet.dayssince(Convert.ToDateTime(tweet.TimeStamp)) < 1)
+       { %>
+      <%: Convert.ToDateTime(tweet.TimeStamp).GetDateTimeFormats('t').First() %>:
+       <% }
+       else
+       { %>
+        <%: Convert.ToDateTime(tweet.TimeStamp).GetDateTimeFormats('d').First() %>:
+       <% } %>
+      
+    </td>
     <td class="term2"><%: tweet.Tweet %></td>    
     </tr>
        

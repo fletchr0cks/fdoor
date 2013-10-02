@@ -7,5 +7,5 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>DoneTwitterAuth</h2>
-    <div class="term3btn">Returned: </div<%: ViewData["deets"] %>
+    <div class="term3btn">Returned: </div><%: ViewData["deets"] %>
 </asp:Content>
