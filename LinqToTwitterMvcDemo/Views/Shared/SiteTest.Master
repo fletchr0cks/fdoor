@@ -181,7 +181,7 @@
         //} else {
           //  GetWeather(lat, lng, min, max);
         //}
-        alert("max=" + max + " min=" + min);
+        //alert("max=" + max + " min=" + min);
         $('#suminj').html("");
         var jsonc = get_cookie("IDList");
         var jsone = eval('(' + jsonc + ')');
@@ -215,7 +215,7 @@
 
             var email = getID(i);
             var name = getFn(i);
-            alert(email + i);
+            //alert(email + i);
             getevents(email, name, i, max, min);
 
             // alert(idlist[0]);
@@ -311,7 +311,7 @@
 
     function getevents(email, name, i, max, min) {
         //inject html
-
+        alert("get events");
         $.ajax({
             type: "POST",
             url: "/Home/DoneTest",
@@ -322,7 +322,7 @@
                 //type = refresh
                 var typej = jsonresp['type'];
                 if (typej == "refresh") {
-                    //alert("refreshing");
+                    alert("refreshing");
                     window.location.href = '/Home/GoogleRefresh';
                 } else {
                     var summary = jsonresp['summary'];
@@ -330,7 +330,7 @@
                     // alert(jsonresp.items.count());
                     var item_ct = 0;
                     for (_obj in jsonresp.items) item_ct++;
-                    //alert(item_ct);
+                    alert(item_ct);
                     if (item_ct != 0) {
                         var datestr = formatDate(min);
                         $('#sum' + i).append("<br /><div class=\"term1\">" + name + "</div>");
