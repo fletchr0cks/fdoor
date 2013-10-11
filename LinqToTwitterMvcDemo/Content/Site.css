@@ -5,21 +5,34 @@ to use a different color start by replacing all instances of
 ----------------------------------------------------------*/
 body
 {
-    background-color: #000;
+    background-color: #FFF;
     font-size: .75em;
     font-family: Verdana, Helvetica, Sans-Serif;
     margin: 0;
     padding: 0;
     color: #696969;
 }
-.term1 {font-family: 'Helvetica', cursive;color: #ADADAD; font-size:18px; vertical-align:top}
-.day {font-family: 'Helvetica', cursive;color: #8F8F8F; font-size:16px; vertical-align:top}
-.term1evt {font-family: 'Helvetica', cursive;color: #FFF; font-size:16px; padding-bottom: 8px}
-.term2 {font-family: 'Helvetica', cursive;color: #FFF; font-size:16px}
-.term3 {font-family: 'Helvetica', cursive;color: #FFF; font-size:20px; padding-bottom: 2px; display:inline}
+#wrap {
+   width:600px;
+   margin:0 auto;
+}
+#left_col {
+   float:left;
+   width:300px;
+}
+#right_col {
+   float:right;
+   width:300px;
+}
+.term1 {font-family: 'Helvetica', cursive;color: #000; font-size:18px; vertical-align:top}
+.day {font-family: 'Helvetica', cursive;color: #000; font-size:16px; vertical-align:top; padding-top: 10px}
+.term1evt {font-family: 'Helvetica', cursive;color: #000; font-size:16px; padding-bottom: 8px}
+.term2 {font-family: 'Helvetica', cursive;color: #000; font-size:16px;vertical-align:middle;}
+.banner {font-family: 'Helvetica', cursive;color: #000; font-size:24px; padding-top: 10px}
+.term3 {font-family: 'Helvetica', cursive;color: #000; font-size:20px; padding-bottom: 2px; display:inline}
 .term3btn {font-family: 'Helvetica', cursive;color: #FFF; border-color: #FFF; font-size:18px; padding:2px; display:inline; vertical-align:middle}
-.title {font-family: 'Helvetica', cursive;color: #8F8F8F; font-size:20px; padding-bottom: 2px}
-.thin { border-bottom:2px solid #8F8F8F; vertical-align:middle; height:10px }
+.title {font-family: 'Helvetica', cursive;color: #000; font-size:20px; padding-bottom: 2px}
+.thin { border-bottom:2px solid #000; vertical-align:middle; height:10px }
 .fat { height: 10px }
 .spacer { height: 5px }
 .buttons { }
@@ -101,14 +114,14 @@ page width. Or, you can specify an exact pixel width. */
 
 .left
 {
-    width: 70%;
+    width: 50%;
    
     float:left;
 }
 
 .right
 {
-    width: 30%;
+    width: 50%;
     float:right;   
    
 }
@@ -150,8 +163,8 @@ page width. Or, you can specify an exact pixel width. */
 
 #main
 {
-    padding: 30px 30px 15px 30px;
-    background-color: #000;
+    padding: 10px 10px 15px 10px;
+    background-color: #FFF;
     margin-bottom: 30px;
     _height: 1px; /* only IE6 applies CSS properties starting with an underscore */
 }
@@ -265,9 +278,9 @@ table
   width: 100%
 }
 
-td.tdleft {background: #272727;}
+td.tdleft {background: #272727; height: 20px}
 
-td.tdright { text-align: right; background: #272727 }
+td.tdright { text-align: right; background: #272727; height: 20px }
 
 table td 
 {

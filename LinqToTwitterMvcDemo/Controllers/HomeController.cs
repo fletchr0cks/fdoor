@@ -403,7 +403,7 @@ namespace LinqToTwitterMvcDemo.Controllers
             SetCookie("lat", lat);
             SetCookie("long", lng);
             //save cookie
-            RedirectToAction("Index_T");
+            //RedirectToAction("Index_T");
         }
 
         public ActionResult SaveTwID(string id)
@@ -470,8 +470,7 @@ namespace LinqToTwitterMvcDemo.Controllers
                          TimeStamp = Convert.ToString(tweet.CreatedAt.Date),
                          Tweet = tweet.Text,
                          ID = tweet.ID
-                     })
-                    .ToList();
+                     }).Take(5).ToList();
                 string status = "hihi " + DateTime.Now;
                 // var tweetnew = twitterCtx.UpdateStatus(status);
                 //var dtweet = twitterCtx.NewDirectMessage(tname,msg);
