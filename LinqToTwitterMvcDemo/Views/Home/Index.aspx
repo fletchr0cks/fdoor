@@ -16,7 +16,7 @@
     {
     %>
      <tr>
-    <td style="width:50px" class="term2">
+    <td style="width:100px" class="term2">
     <% if (tweet.dayssince(Convert.ToDateTime(tweet.TimeStamp)) < 1)
        { %>
       <%: Convert.ToDateTime(tweet.TimeStamp).GetDateTimeFormats('t').First() %>:
@@ -47,8 +47,6 @@
      <div id="datebanner" class="banner"></div>
      <div id="suminj"></div></div>
 <div class="right"><div class="day" id="weather"></div></div>
-    <div class="term1" id="evt"></div> 
-   
     <div class="fat"></div>
      <div class="buttons" id="btns"></div>
     
