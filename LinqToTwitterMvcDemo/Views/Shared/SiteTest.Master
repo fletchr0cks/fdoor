@@ -1,0 +1,551 @@
+﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
+    <meta http-equiv="refresh" content="3000" />
+    <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+    <script src="../../Scripts/iso8601.js" type="text/javascript"></script>
+     <script src="../../Scripts/date.js" type="text/javascript"></script>
+    
+    </head>
+
+<script type="text/javascript">
+
+    function init() {
+      //  alert("loaded");
+        
+    }
+
+    function get_cookie(name) {
+        var results = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        if (results)
+            return (unescape(results[2]));
+        else
+            return null;
+    }
+
+    function setTown() {
+        var town = document.getElementById('town').value;
+        //alert(town);
+        var html = "";
+        $.ajax({
+            type: "GET",
+            url: "http://api.geonames.org/search?q=" + town + "&maxRows=10&username=fletch1&type=json&orderby=relevance",
+            //url: "http://api.geonames.org/findNearbyPlaceNameJSON?lat=" + lat + "&lng=" + lng + "&username=fletch1",
+            dataType: "jsonp",
+            success: function (json) {
+                $.each(json.geonames, function (i, geo) {
+                    //alert(geo.lat);
+                    //var html = "<div onclick=/Home/SaveLatLong?lat=" + geo.lat + "&lng=" + geo.lng + ">" + geo.toponymName + ", " + geo.adminName1 + ", " + geo.countryName + "</div>";
+                    // town = geo.toponymName;
+                    html = html + "<div style=\"cursor:pointer\" onclick=\"SaveLoc(" + geo.lat + "," + geo.lng + ")\">" + geo.toponymName + ", " + geo.adminName1 + ", " + geo.countryName + "</div>";
+                    // adminName1
+                    // countryNam  
+                });
+
+                $("#towns").html("Found these matches, please select one <br />" + html);
+
+                //SaveNewLocation(lat, lng, town);
+
+            },
+            error: function (xhr, error) {
+
+                // $("#gps_results").html("No town listed for: " + lat + "," + lng);
+            },
+            complete: function (xhr, status) {
+
+            }
+
+        });
+    }
+
+    function SaveLoc(lat, lng) {
+        $.ajax({
+            type: "POST",
+            url: "/Home/SaveLatLong",
+            data: "lat=" + lat + "&lng=" + lng,
+            dataType: "text/plain",
+            success: function (json) {
+                document.location.href = '/Home/Index_Test';
+            },
+            error: function (xhr, error) {
+                // console.debug(xhr); console.debug(error);
+            },
+            complete: function (xhr, status) {
+                // GetWeather(lat, lng, 0, 1);
+                document.location.href = '/Home/Index_Test';
+            }
+
+        });
+
+       
+
+    }
+
+    function GetWeather(lat, lng, min, max) {
+        $('#weather').html("");
+        //set_cookie("teststore", "val", 1);
+        var NewDate = new Date();
+        var loc = lat + "," + lng;
+        min = min*2;
+        max = min + 1;
+        var ck = get_cookie("day0");
+        //alert("ck=" + ck);
+        if (ck == null) {
+            // $('#weather').html("trying weather");
+            $.ajax({
+                type: "GET",
+                url: "http://api.wunderground.com/api/bf45926a1b878028/forecast/geolookup/q/" + loc + ".json",
+
+                dataType: "jsonp",
+                success: function (json) {
+                    //var json = eval('(' + jsontxt + ')');
+                    var jsontext = JSON.stringify(json);
+                    // $.each(json.Id, function (i, idlist) {
+
+                    //});
+                    var i = 0;
+                    while (i < 8) {
+                        var text = json['forecast']['txt_forecast']['forecastday'][i]['fcttext_metric'];
+                        var icon = json['forecast']['txt_forecast']['forecastday'][i]['icon'];
+                        // alert(day);
+                        set_cookie("day" + i, text, 1);
+                        set_cookie("icon" + i, icon, 1);
+                        i++;
+                    }
+                    var location = json['location']['city'];
+
+                    $('#footer').html("Location: " + location + "(" + lat + ", " + lng + ")</br>" + "Updated: " + NewDate);
+                    //$('#weather').append("Weather for " + location);
+                    var day = json['forecast']['txt_forecast']['forecastday'][min]['title'];
+                    var day2 = json['forecast']['txt_forecast']['forecastday'][max]['title'];
+                    var forecast = json['forecast']['txt_forecast']['forecastday'][min]['fcttext_metric'];
+                    var forecast2 = json['forecast']['txt_forecast']['forecastday'][max]['fcttext_metric'];
+                    var icon = json['forecast']['txt_forecast']['forecastday'][min]['icon'];
+                    var icon2 = json['forecast']['txt_forecast']['forecastday'][max]['icon'];
+                    var img1 = "<img src=\"http://icons.wxug.com/i/c/i/" + icon + ".gif\">";
+                    var img2 = "<img src=\"http://icons.wxug.com/i/c/i/" + icon2 + ".gif\">";
+                    //set_cookie("0text", forecast, 1);
+                    //set_cookie("0icon", forecast, 1);
+                    //var htmltable = "<table><tr><td>" + day + ":  </td><td>" + forecast + "</td></tr><tr><td>" + day2 + ":  </td><td>" + forecast2 + "</td></tr></table>";
+                     //$('#weather').append(day + "</br>" + forecast + "</br>" + day2 + "</br>" + forecast2 + "<img src=\"http://icons.wxug.com/i/c/i/" + icon2 + ".gif\" />");
+                    var htmltable = "<table><tr><td>" + img1 + "</td><td>" + forecast + "</td></tr></table></br>" +
+                    "<table><tr><td>" + img2 + "</td><td>" + forecast2 + "</td></tr></table>";
+          
+                     $('#weather').append(htmltable);
+
+                    var epoch = Math.round(new Date().getTime() / 1000)
+
+                },
+                error: function (xhr, error) {
+                    console.debug(xhr); console.debug(error);
+                    $('#footer').appnd(xhr + "  " + error);
+                },
+                complete: function () {
+
+                }
+
+            });
+
+        } else {
+            var forecast = get_cookie("day" + min);
+            var forecast2 = get_cookie("day" + max);
+            var img = get_cookie("icon" + min);
+            var img2 = get_cookie("icon" + max);
+            var icon = "<img src=\"http://icons.wxug.com/i/c/i/" + img + ".gif\">";
+            var icon2 = "<img src=\"http://icons.wxug.com/i/c/i/" + img2 + ".gif\">";
+            var htmltable = "<table><tr><td>" + icon + "</td><td>" + forecast + "</td></tr></table></br>" +
+            "<table><tr><td>" + icon2 + "</td><td>" + forecast2 + "</td></tr></table>";
+            //$('#weather').append(day + "</br>" + forecast + "</br>" + day2 + "</br>" + forecast2 + "<img src=\"http://icons.wxug.com/i/c/i/" + icon2 + ".gif\" />");
+            $('#weather').append(htmltable);
+
+
+        }
+
+    }
+
+    function testa(max, min) {
+        //check weather cookie
+        //if max ==1
+        
+        var lat = get_cookie("lat");
+        var lng = get_cookie("long");
+
+        if (lat == null) {
+            $('#towns').show();
+            //getTowns();
+            //alert("towns");
+        } else {
+            GetWeather(lat, lng, min, max);
+        }
+       
+        $('#suminj').html("");
+        var jsonc = get_cookie("IDList");
+        var jsone = eval('(' + jsonc + ')');
+        var count = jsone['Count'];
+
+        var min_bk = parseInt(min) - 1;
+        var min_fw = parseInt(min) + 1;
+        var max_fw = parseInt(max) + 1;
+        var max_bk = parseInt(max) - 1;
+        var btn_txt_bk;
+        var btn_txt_fw;
+        if (parseInt(min) == 0) {
+            $('#datebanner').html(formatDate(0));
+            btn_txt_bk = "Yesterday";
+            btn_txt_fw = "Tomorrow";
+        } else {
+            $('#datebanner').html(formatDate(min_bk + 1))
+            btn_txt_bk = formatDate(min_bk);
+            btn_txt_fw = formatDate(max);
+
+        }
+
+        var bk_btn_html = "<div class=\"term3btn\" style=\"cursor:pointer\" onclick=\"testa(" + max_bk + "," + min_bk + ")\">" + btn_txt_bk + "</div>";
+        var fw_btn_html = "<div class=\"term3btn\" style=\"cursor:pointer\" onclick=\"testa(" + max_fw + "," + min_fw + ")\">" + btn_txt_fw + "</div>";
+        $('#btns').html("<table><tr><td class=\"tdleft\">" + bk_btn_html + "</td><td class=\"tdright\">" + fw_btn_html + "</td><tr><table>");
+
+        $.each(jsone.Id, function (i, idlist) {
+
+            var sumhtml = "<div id=\"sum" + i + "\"></div>";
+            $('#suminj').append(sumhtml);
+
+            var email = getID(i);
+            var name = getFn(i);
+            // alert(email + i);
+            getevents(email, name, i, max, min);
+
+            // alert(idlist[0]);
+        });
+    }
+
+    function formatDate(num) {
+        var NewDate = new Date();
+
+        NewDate.setDate(NewDate.getDate() + num);
+        var day;
+        var month;
+        var date = NewDate.getUTCDate();
+        var daynum = NewDate.getUTCDay();
+        var monthnum = NewDate.getUTCMonth();
+        if (parseInt(monthnum) == 1) {
+            month = "February";
+        } else if (parseInt(monthnum) == 2) {
+            month = "March";
+        } else if (parseInt(monthnum) == 3) {
+            month = "April";
+        } else if (parseInt(monthnum) == 4) {
+            month = "May";
+        } else if (parseInt(monthnum) == 5) {
+            month = "June";
+        } else if (parseInt(monthnum) == 6) {
+            month = "July";
+        } else if (parseInt(monthnum) == 7) {
+            month = "August";
+        } else if (parseInt(monthnum) == 8) {
+            month = "September";
+        } else if (parseInt(monthnum) == 9) {
+            month = "October";
+        } else if (parseInt(monthnum) == 10) {
+            month = "November";
+        } else if (parseInt(monthnum) == 11) {
+            month = "December";
+        } else if (parseInt(monthnum) == 0) {
+            month = "January";
+        }
+        //alert(NewDate + " d: " + date + " n: " + daynum);
+        if (parseInt(daynum) == 1) {
+            day = "Monday";
+        } else if (parseInt(daynum) == 2) {
+            day = "Tuesday";
+        } else if (parseInt(daynum) == 3) {
+            day = "Wednesday";
+        } else if (parseInt(daynum) == 4) {
+            day = "Thursday";
+        } else if (parseInt(daynum) == 5) {
+            day = "Friday";
+        } else if (parseInt(daynum) == 6) {
+            day = "Saturday";
+        } else if (parseInt(daynum) == 0) {
+            day = "Sunday";
+        }
+
+        var date_str = day + " " + date + " " + month;
+
+
+        return date_str;
+    }
+
+    function getID(num) {
+        var jsonc = get_cookie("IDList");
+        var jsone = eval('(' + jsonc + ')');
+        return jsone.Id[num];
+    }
+
+    function getFn(num) {
+        var jsonc = get_cookie("IDList");
+        var jsone = eval('(' + jsonc + ')');
+        return jsone.Fullname[num];
+    }
+
+
+    function get_cookie(name) {
+        var results = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        if (results)
+            return (unescape(results[2]));
+        else
+            return null;
+    }
+
+    function set_cookie(name, value, days) {
+        //value = "data here";
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        var expires = "; expires=" + date.toGMTString();
+        document.cookie = name + '=' + value + expires + '; path=/'
+
+    }
+
+    function getevents(email, name, i, max, min) {
+        //inject html
+
+        $.ajax({
+            type: "POST",
+            url: "/Home/DoneTest",
+            data: "email=" + email + "&max=" + max + "&min=" + min,
+            dataType: "text/plain",
+            success: function (json) {
+                var jsonresp = eval('(' + json + ')');
+                //type = refresh
+                var typej = jsonresp['type'];
+                if (typej == "refresh") {
+                    //alert("refreshing");
+                    window.location.href = '/Home/GoogleRefresh';
+                } else {
+                    var summary = jsonresp['summary'];
+
+                    // alert(jsonresp.items.count());
+                    var item_ct = 0;
+                    for (_obj in jsonresp.items) item_ct++;
+                    //alert(item_ct);
+                    if (item_ct != 0) {
+                        var datestr = formatDate(min);
+                        $('#sum' + i).append("<br /><div class=\"term1\">" + name + "</div>");
+                        $.each(jsonresp.items, function (n, item) {
+                            if (item.status != "cancelled") {
+                                var datetest = item.start.dateTime;
+                                var datetest2 = item.start.date;
+                                var start_dt = new Date(item.start.dateTime);
+                                var end_dt = new Date(item.end.dateTime);
+                                var start_d = new Date(item.start.date);
+                                var end_d = new Date(item.end.date);
+                                var stf = parseISO8601Date(item.start.dateTime);
+                                var endf = parseISO8601Date(item.end.dateTime);
+                                //var dts = formatDT(itemstart,"start",itemend);
+                                var dte = "";
+                                if (start_dt != "Invalid Date") {
+                                    // dte = start_dt.toString('H:mm tt') + " - " + end_dt;
+                                } else {
+                                    // dte = "All day";
+                                }
+                                //formatDT(itemstart, itemend, min); write this back in
+                                var location = "";
+                                if (item.location != undefined) {
+                                    location = ", " + item.location;
+                                }
+
+                           
+                                $('#sum' + i).append("<div class=\"term3\">" + stf + " - " + endf + "</div>    <div class=\"term1evt\">" + item.summary + location + "</div>");
+                            }
+
+                        });
+                    } else {
+                          $('#sum' + i).append("<br /><div class=\"term1\">No events for " + name + "</div>");
+                    }
+                }
+            },
+            error: function (xhr, error) {
+                // console.debug(xhr); console.debug(error);
+            },
+            complete: function (xhr, status) {
+            }
+
+        });
+    }
+
+    function parseISO8601(s) {
+        var re = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:.(\d+))?(Z|[+-]\d{2})(?::(\d{2}))?/,
+            d = s.match(re);
+        if (!d) return null;
+        for (var i in d)
+            d[i] = ~ ~d[i];
+        return new Date(Date.UTC(d[1], d[2] - 1, d[3], d[4], d[5], d[6], d[7]) + (d[8] * 60 + d[9]) * 60000);
+    }
+
+    function parseISO8601Date(s) {
+        
+        // parenthese matches:
+        // year month day    hours minutes seconds  
+        // dotmilliseconds 
+        // tzstring plusminus hours minutes
+        var re = /(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)(\.\d+)?(Z|([+-])(\d\d):(\d\d))/;
+
+        var d = [];
+        try {
+            d = s.match(re);
+
+            // "2010-12-07T11:00:00.000-09:00" parses to:
+            //  ["2010-12-07T11:00:00.000-09:00", "2010", "12", "07", "11",
+            //     "00", "00", ".000", "-09:00", "-", "09", "00"]
+            // "2010-12-07T11:00:00.000Z" parses to:
+            //  ["2010-12-07T11:00:00.000Z",      "2010", "12", "07", "11", 
+            //     "00", "00", ".000", "Z", undefined, undefined, undefined]
+
+            if (!d) {
+                throw "Couldn't parse ISO 8601 date string '" + s + "'";
+            }
+            //alert(d);
+            // parse strings, leading zeros into proper ints
+            var a = [1, 2, 3, 4, 5, 6, 10, 11];
+            for (var i in a) {
+                d[a[i]] = parseInt(d[a[i]], 10);
+                //alert(d[a[i]]);
+            }
+            d[7] = parseFloat(d[7]);
+            var hr = parseInt(d[4], 10);
+            var min = parseInt(d[5], 10);
+            if (hr < 10) {
+                hr = "0" + hr;
+            }
+            if (min < 10) {
+                min = "0" + min;
+            }
+            // Date.UTC(year, month[, date[, hrs[, min[, sec[, ms]]]]])
+            // note that month is 0-11, not 1-12
+            // see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date/UTC
+            var ms = Date.UTC(d[1], d[2] - 1, d[3], d[4], d[5], d[6]);
+            //alert(ms + d[2]);
+            // if there are milliseconds, add them
+            if (d[7] > 0) {
+                ms += Math.round(d[7] * 1000);
+            }
+
+            // if there's a timezone, calculate it
+            if (d[8] != "Z" && d[10]) {
+                var offset = d[10] * 60 * 60 * 1000;
+                if (d[11]) {
+                    offset += d[11] * 60 * 1000;
+                }
+                if (d[9] == "-") {
+                    ms -= offset;
+                }
+                else {
+                    ms += offset;
+                }
+            }
+            var outp = hr + ":" + min;
+            return outp;
+        } catch (error) {
+        return ("All day");
+        }
+        //return new Date(ms);
+    };
+
+function SubmitTwID() {
+    var twitterID = document.getElementById("twid").value;
+    $.ajax({
+        type: "POST",
+        url: "/Home/SaveTwID",
+        data: "id=" + twitterID,
+        dataType: "text/plain",
+        success: function (json) {
+
+        },
+        error: function (xhr, error) {
+            // console.debug(xhr); console.debug(error);
+        },
+        complete: function (xhr, status) {
+            //
+        }
+
+    });    
+
+
+}
+
+    function formatDT(start, end, num) {
+        var NewDate = new Date();
+        NewDate.setDate(NewDate.getDate() + num);
+        var ms = Math.abs(start - end);
+        var diffd = Math.floor(ms / 1000 / 60 / 60 / 24);
+        var today = new Date();
+        var todayday = today.getUTCDate();
+        var todaymon = today.getMonth();
+        var diff;
+        var moretxt = "";
+        if (parseInt(diffd) > 0) {
+            var ms2 = Math.abs(NewDate - start);
+            var first = Math.floor(ms2 / 1000 / 60 / 60 / 24);
+            moretxt = "(day " + first + " of " + diffd + ")";
+        }
+        var sampm = "am";
+        var starthr = start.getHours();
+        var startmm = start.getMinutes();
+        if (parseInt(startmm) < 10) {
+            startmm = "0" + startmm;
+        }
+        if (parseInt(starthr) > 12) {
+            starthr = parseInt(starthr) - 12;
+            sampm = "pm";
+        }
+
+        var eampm = "am";
+        var endhr = end.getHours();
+        var endmm = end.getMinutes();
+        if (parseInt(endmm) < 10) {
+            endmm = "0" + endmm;
+        }
+        if (parseInt(endhr) > 12) {
+            endhr = parseInt(endhr) - 12;
+            eampm = "pm";
+        }
+        var startdt = Date.parse(start);
+        var enddt = new Date(Date.parse(start));
+        var startfm = start.getHours();
+        //var st = start.split(" ");
+        //startfm = st[1];
+        var endfm = end.toString('H:mm tt');
+        //var dt = startdt  + " -> " + enddt;
+        var dt = startfm + " - " + endfm + moretxt;
+        //var dt = starthr + ":" + startmm + sampm + " - " + endhr + ":" + endmm + eampm + moretxt + date2;
+        return dt;
+    }
+
+    function parseDate(date) {
+
+        var m = /^(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d) UTC$/.exec(date);
+        alert(m[2]);
+        var tzOffset = new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]).getTimezoneOffset();
+
+        return new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5] - tzOffset, +m[6]);
+    }
+
+
+</script>
+
+<body onload="testa(1,0);">
+    <div class="page">
+        <div id="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+          
+            <div id="footer">
+            <div class="term1">
+           </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

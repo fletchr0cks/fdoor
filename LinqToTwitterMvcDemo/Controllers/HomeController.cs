@@ -490,6 +490,84 @@ namespace LinqToTwitterMvcDemo.Controllers
             }
         }
 
+        public ActionResult Index_Test()
+        //enter twitter username and message for restful api
+        {
+
+            try
+            {
+                string tname = Request.Cookies["TwitterID"].Value;
+                string accesstoken = Request.Cookies["oauth_accessToken"].Value;
+                string oauthtoken = Request.Cookies["oauth_oauthToken"].Value;
+                var msg = "hardcoded test " + DateTime.Now;
+                //http://localhost:5010/Home/SetTwitterID?oauth_token=JjJCdn2Tn3o9Cz3lHEFotAZQ5xZSz8VbTAjHhg1aTt0&oauth_verifier=TP7PWgnTi2CIu2YuQ7AIpRDknEYuSe0H1RcYXMSp5g
+                //Auth: oauthtoken=1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5 id=FletcherFridge 1317302059 oathaccesstoken= v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w
+                credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
+                credentials.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
+                credentials.AccessToken = accesstoken;
+                //"36777457-120pFjOwR6YjwAHZcYnlrlwsW7cMBrmP7IAvH1NIY";
+                //oauthverifier;
+                //hWSN0pUWsBFlvS8fQbwpR31iqWLbhEnbUBCU3jZfI     from server
+                //36777457-120pFjOwR6YjwAHZcYnlrlwsW7cMBrmP7IAvH1NIY
+                credentials.OAuthToken = oauthtoken;
+                //"71UrF3zuFNouejyu0RUhIqRVWsREuzzIpiwWYSc8A";
+                //oauthtoken;
+                //71UrF3zuFNouejyu0RUhIqRVWsREuzzIpiwWYSc8A
+
+                if (credentials.ConsumerKey == null || credentials.ConsumerSecret == null)
+                {
+                    credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
+                    credentials.ConsumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
+                }
+
+                auth = new MvcAuthorizer
+                {
+                    Credentials = credentials
+                };
+
+                auth.CompleteAuthorization(Request.Url);
+
+                if (!auth.IsAuthorized)
+                {
+                    Uri specialUri = new Uri(Request.Url.ToString());
+                    return auth.BeginAuthorization(specialUri);
+                }
+                //("oauth_accessToken", credentials.AccessToken);
+                //SetCookie("oauth_oauthToken", credentials.OAuthToken);
+                twitterCtx = new TwitterContext(auth);
+
+                var friendTweets =
+                    (from tweet in twitterCtx.Status
+                     where tweet.Type == StatusType.User &&
+                           tweet.ScreenName == tname
+                     select new TweetViewModel
+                     {
+                         ImageUrl = tweet.User.ProfileImageUrl,
+                         ScreenName = tweet.User.Identifier.ScreenName,
+                         TimeStamp = Convert.ToString(tweet.CreatedAt.Date),
+                         Tweet = tweet.Text,
+                         ID = tweet.ID
+                     }).Take(5).ToList();
+                string status = "hihi " + DateTime.Now;
+                // var tweetnew = twitterCtx.UpdateStatus(status);
+                //var dtweet = twitterCtx.NewDirectMessage(tname,msg);
+                var oauthToken = auth.Credentials.OAuthToken;
+                var oauthAccessT = auth.Credentials.AccessToken;
+                var userd = auth.Credentials.ScreenName + " " + auth.Credentials.UserId;
+                //http://localhost:5010/?oauth_token=9IWia8yWenYytqosbErCRno7KcJPr55fMXHvqJkoY&oauth_verifier=g6pbTya6OOcsH2O0f3PuzQKUtCQBz1lQBz0BmnixHU
+                ViewData["authdeets"] = oauthAccessT;
+                //Auth: oauthtoken=1317302059-F57J7rhJw18BYymjoZ5nJGqwhKd0nqax3jaItN5 id=FletcherFridge 1317302059 oathaccesstoken= v3g3lcENHnDPNNYTpSLLZZtZmCJ43bnvohLlDnNg7w
+                //+ save id first time.
+                return View("IndexTest", friendTweets);
+
+            }
+            catch
+            {
+                return RedirectToAction("SetTwitterID");
+            }
+        }
+
+
         public ActionResult SetTwitterID()
         {
                 credentials.ConsumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
