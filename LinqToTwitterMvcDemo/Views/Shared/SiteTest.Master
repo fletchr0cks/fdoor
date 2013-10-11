@@ -311,7 +311,7 @@
 
     function getevents(email, name, i, max, min) {
         //inject html
-        alert("get events");
+       // alert("get events");
         $.ajax({
             type: "POST",
             url: "/Home/DoneTest",
@@ -327,7 +327,7 @@
                 } else {
                     var summary = jsonresp['summary'];
 
-                    // alert(jsonresp.items.count());
+                    alert(json);
                     var item_ct = 0;
                     for (_obj in jsonresp.items) item_ct++;
                     alert(item_ct);
