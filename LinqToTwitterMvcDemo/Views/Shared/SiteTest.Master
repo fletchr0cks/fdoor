@@ -319,6 +319,7 @@
             dataType: "text/plain",
             success: function (json) {
                 var jsonresp = eval('(' + json + ')');
+                alert(json);
                 //type = refresh
                 var typej = jsonresp['type'];
                 if (typej == "refresh") {
@@ -327,7 +328,7 @@
                 } else {
                     var summary = jsonresp['summary'];
 
-                    alert(json);
+                    
                     var item_ct = 0;
                     for (_obj in jsonresp.items) item_ct++;
                     alert(item_ct);
