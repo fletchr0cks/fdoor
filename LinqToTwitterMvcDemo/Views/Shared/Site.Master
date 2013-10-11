@@ -179,7 +179,7 @@
             //getTowns();
             //alert("towns");
         } else {
-            GetWeather(lat, lng, min, max);
+            //GetWeather(lat, lng, min, max);
         }
        
         $('#suminj').html("");
@@ -194,7 +194,7 @@
         var btn_txt_bk;
         var btn_txt_fw;
         if (parseInt(min) == 0) {
-            $('#datebanner').html(formatDate(0));
+            $('#datebanner').html(formatDate(0) + "<div class=\"day\">[Taken out weather for a kindle render issue]</div>");
             btn_txt_bk = "Yesterday";
             btn_txt_fw = "Tomorrow";
         } else {
