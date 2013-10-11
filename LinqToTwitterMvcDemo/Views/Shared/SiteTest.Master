@@ -174,14 +174,14 @@
         var lat = get_cookie("lat");
         var lng = get_cookie("long");
 
-        if (lat == null) {
-            $('#towns').show();
+        //if (lat == null) {
+          //  $('#towns').show();
             //getTowns();
             //alert("towns");
-        } else {
-            GetWeather(lat, lng, min, max);
-        }
-       
+        //} else {
+          //  GetWeather(lat, lng, min, max);
+        //}
+        alert("max=" + max + " min=" + min);
         $('#suminj').html("");
         var jsonc = get_cookie("IDList");
         var jsone = eval('(' + jsonc + ')');
@@ -194,11 +194,11 @@
         var btn_txt_bk;
         var btn_txt_fw;
         if (parseInt(min) == 0) {
-            $('#datebanner').html(formatDate(0));
+            //$('#datebanner').html(formatDate(0));
             btn_txt_bk = "Yesterday";
             btn_txt_fw = "Tomorrow";
         } else {
-            $('#datebanner').html(formatDate(min_bk + 1))
+            //$('#datebanner').html(formatDate(min_bk + 1))
             btn_txt_bk = formatDate(min_bk);
             btn_txt_fw = formatDate(max);
 
@@ -215,7 +215,7 @@
 
             var email = getID(i);
             var name = getFn(i);
-            // alert(email + i);
+            alert(email + i);
             getevents(email, name, i, max, min);
 
             // alert(idlist[0]);
