@@ -311,7 +311,7 @@
 
     function getevents(email, name, i, max, min) {
         //inject html
-       // alert("get events");
+        alert("get events" + email + max + min);
         $.ajax({
             type: "POST",
             url: "/Home/DoneTest",
